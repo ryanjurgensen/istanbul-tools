@@ -28,6 +28,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/phayes/freeport"
 
+	"github.com/getamis/istanbul-tools/cmd/utils"
 	"github.com/getamis/istanbul-tools/genesis"
 )
 
@@ -101,7 +102,7 @@ func NewDefaultBlockchainWithFaulty(numOfNormal int, numOfFaulty int) (bc *block
 		log.Fatalf("Cannot connect to Docker daemon, err: %v", err)
 	}
 
-	keys, addrs := generateKeys(numOfNormal + numOfFaulty)
+	keys, _, addrs := utils.GenerateKeys(numOfNormal + numOfFaulty)
 	bc.setupGenesis(addrs)
 	// Create normal validators
 	bc.opts = normalOpts
@@ -219,7 +220,7 @@ func (bc *blockchain) CreateNodes(num int, options ...Option) (nodes []Ethereum,
 		opts = append(opts, options...)
 
 		// Host data directory
-		dataDir, err := generateRandomDir()
+		dataDir, err := utils.GenerateRandomDir()
 		if err != nil {
 			log.Println("Failed to create data dir", err)
 			return nil, err
@@ -247,7 +248,7 @@ func (bc *blockchain) CreateNodes(num int, options ...Option) (nodes []Ethereum,
 // ----------------------------------------------------------------------------
 
 func (bc *blockchain) addValidators(numOfValidators int) error {
-	keys, addrs := generateKeys(numOfValidators)
+	keys, _, addrs := utils.GenerateKeys(numOfValidators)
 	bc.setupGenesis(addrs)
 	bc.setupValidators(keys, bc.opts...)
 
@@ -288,7 +289,7 @@ func (bc *blockchain) setupValidators(keys []*ecdsa.PrivateKey, options ...Optio
 		opts = append(opts, options...)
 
 		// Host data directory
-		dataDir, err := generateRandomDir()
+		dataDir, err := utils.GenerateRandomDir()
 		if err != nil {
 			log.Fatal("Failed to create data dir", err)
 		}
