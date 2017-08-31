@@ -14,33 +14,30 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package main
+package test
 
-import (
-	"fmt"
-	"os"
+import "github.com/urfave/cli"
 
-	"github.com/urfave/cli"
-
-	"github.com/getamis/istanbul-tools/cmd/istanbul/extra"
-	"github.com/getamis/istanbul-tools/cmd/istanbul/test"
-	"github.com/getamis/istanbul-tools/cmd/utils"
+var (
+	TestCommand = cli.Command{
+		Name:  "test",
+		Usage: "Istanbul testing",
+		Subcommands: []cli.Command{
+			cli.Command{
+				Action: runLoadTesting,
+				Name:   "load-testing",
+				Aliases: []string{
+					"t",
+				},
+				Usage: "Run Istanbul load testing",
+				Flags: []cli.Flag{
+					validatorSizeFlag,
+					gasLimitFlag,
+				},
+				Description: `
+		This command runs Istanbul load testing
+		`,
+			},
+		},
+	}
 )
-
-func main() {
-	app := utils.NewApp()
-	app.Usage = "the istanbul-tools command line interface"
-
-	app.HideVersion = true // we have a command to print the version
-	app.Copyright = "Copyright 2017 The Amis Authors"
-
-	app.Commands = []cli.Command{
-		extra.ExtraCommand,
-		test.TestCommand,
-	}
-
-	if err := app.Run(os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-}

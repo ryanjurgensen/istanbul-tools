@@ -75,6 +75,15 @@ func NewFile(options ...Option) string {
 	return filepath.Join(dir, FileName)
 }
 
+func NewFileAt(dir string, options ...Option) string {
+	genesis := New(options...)
+	if err := Save(dir, genesis); err != nil {
+		log.Fatalf("Failed to save genesis to '%s', err: %v", dir, err)
+	}
+
+	return filepath.Join(dir, FileName)
+}
+
 func Save(dataDir string, genesis *core.Genesis) error {
 	filePath := filepath.Join(dataDir, FileName)
 

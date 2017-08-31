@@ -52,7 +52,7 @@ func GenerateRandomDir() (string, error) {
 
 func GenerateKeys(num int) (keys []*ecdsa.PrivateKey, nodekeys []string, addrs []common.Address) {
 	for i := 0; i < num; i++ {
-		nodekey := RandomHex()
+		nodekey := RandomHex()[2:]
 		nodekeys = append(nodekeys, nodekey)
 
 		key, err := crypto.HexToECDSA(nodekey)

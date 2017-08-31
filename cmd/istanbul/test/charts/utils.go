@@ -14,33 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package main
+package charts
 
-import (
-	"fmt"
-	"os"
+import "os/exec"
 
-	"github.com/urfave/cli"
-
-	"github.com/getamis/istanbul-tools/cmd/istanbul/extra"
-	"github.com/getamis/istanbul-tools/cmd/istanbul/test"
-	"github.com/getamis/istanbul-tools/cmd/utils"
-)
-
-func main() {
-	app := utils.NewApp()
-	app.Usage = "the istanbul-tools command line interface"
-
-	app.HideVersion = true // we have a command to print the version
-	app.Copyright = "Copyright 2017 The Amis Authors"
-
-	app.Commands = []cli.Command{
-		extra.ExtraCommand,
-		test.TestCommand,
-	}
-
-	if err := app.Run(os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
+func newInstallCommand() *exec.Cmd {
+	return exec.Command("helm", "install")
 }
